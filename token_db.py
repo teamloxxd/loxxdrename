@@ -1,19 +1,23 @@
+# token_db.py
+
 import time
+from collections import defaultdict
 
-TOKEN_DB = {}
+# Stores: user_id -> { "token": token, "expiry": expiry_timestamp }
+token_data = defaultdict(dict)
 
-def activate_token(user_id):
-    TOKEN_DB[user_id] = {
-        "active": True,
-        "expires_at": time.time() + 3600  # 1 hour validity
-    }
+def generate_token(user_id):
+    token = f"TOKEN_{user_id}_{int(time.time())}"
+    expiry = time.time() + 3600  # 1 hour validity
+    token_data[user_id] = {"token": token, "expiry": expiry}
+    return token
 
-def is_token_active(user_id):
-    data = TOKEN_DB.get(user_id)
-    return data and data["active"] and data["expires_at"] > time.time()
+def is_token_valid(user_id):
+    if user_id in token_data:
+        if time.time() < token_data[user_id]["expiry"]:
+            return True
+    return False
 
-def cleanup_expired_tokens():
-    now = time.time()
-    for user_id in list(TOKEN_DB.keys()):
-        if TOKEN_DB[user_id]["expires_at"] <= now:
-            TOKEN_DB[user_id]["active"] = False
+def delete_token(user_id):
+    if user_id in token_data:
+        del token_data[user_id]
