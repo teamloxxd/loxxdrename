@@ -26,7 +26,7 @@ DATABASE_NAME = os.environ.get("DATABASE_NAME", "renamebot")
 # Other Variables Config
 START_PIC = os.environ.get("START_PIC", "https://graph.org/file/ad48ac09b1e6f30d2dae4.jpg")
 
-
+GP_API_KEY = "b432d83b99c4d39ab728f50a3b05cb8382116e6a"
 
 
 
